@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
         // User::factory()->create([
         //     'name' => 'Geofrey Inigo ',
         //     'email' => 'inigogeofrey@gmail.com',
-        //     'password'=> bcrypt('inigogeofrey'),
+        //     'password'=> bcrypt('bitaw'),
         // ]);
     }
 }
