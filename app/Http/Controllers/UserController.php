@@ -10,6 +10,11 @@ class UserController extends Controller
     /**
      * Show the profile for the given user.
      */
+    
+    public function index()
+    {
+        //
+    }
     public function show($id)
     {
         $user = User::findOrFail($id); // Find user or throw 404

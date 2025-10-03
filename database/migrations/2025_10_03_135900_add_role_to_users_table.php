@@ -19,6 +19,12 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    // public function down(Blueprint $table): void
+    // {
+    //     Schema::table('users', function (Blueprint $table) {
+    //         // 
+    //     });
+    // }
     public function down(): void
     {
         Schema::create('posts', function (Blueprint $table) {
@@ -29,5 +35,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
+        
     }
 };

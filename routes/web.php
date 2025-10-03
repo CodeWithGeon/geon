@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;// Import the controller
 
-
+//Route definitions
 // Route::get('/', function () {
 //     return redirect('/users/12'); // redirect root to a profile for testing
 // });

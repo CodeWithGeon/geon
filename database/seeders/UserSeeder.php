@@ -14,7 +14,10 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-
+        //  $user = User::create([
+        //     'name' => 'Test User',
+        //     'email' => '    
+            
 
           // Create or update an admin user
         User::updateOrCreate(
