@@ -2,9 +2,9 @@ name: Laravel CI
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   laravel-tests:
@@ -17,15 +17,18 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: '8.2'
           extensions: mbstring, bcmath, sqlite
           ini-values: post_max_size=256M, upload_max_filesize=256M
 
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
-      - name: Copy .env example
-        run: cp .env.example .env
+      - name: Set up .env for testing
+        run: |
+          cp .env.example .env
+          echo "DB_CONNECTION=sqlite" >> .env
+          echo "DB_DATABASE=:memory:" >> .env
 
       - name: Generate application key
         run: php artisan key:generate
