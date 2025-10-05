@@ -18,6 +18,6 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id); // Find user or throw 404
-        return view('users.Profile',['user'=> $user]);// Pass user data to a view
+        return view('users.Profile',['user'=> $user]);// Pass user data to the view
     }
 }
