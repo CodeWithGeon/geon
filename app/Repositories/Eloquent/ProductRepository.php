@@ -1,39 +1,55 @@
 <?php
 
 namespace App\Repositories\Eloquent;
+// data related logic for Product model
+//Extends BaseRepository and adds model-specific logic (e.g. getAvailableProducts()
 
 use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryInterface;
-use SebastianBergmann\Type\TrueType;
-//Concrete Repository for Product model (eg. UserRepository for User model, etc.)
-//Extends BaseRepository and adds model-specific logic (e.g. getAvailableProducts()
+use Illuminate\Database\Eloquent\Collection;
+
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
     public function __construct(Product $model)
     {
         parent::__construct($model); //instance of the model
     }
-    // Fetch all products that are marked as available
-    // BaseRepository already has basic CRUD methods
-    
-
-
     //fetch all products that are marked as available
-    public function getAvailableProducts()
+    public function getAvailableProducts(): Collection
     {
-        return $this->model->where('status', 'is_available', true)->get();
+        return $this->model->where('is_available', true)->get();
+
+        
     }
 
+    public function createProduct(array $data)
+    {
+        try {
+            $product = $this->model->create([
+                'name' => $data['name'],
+                'description' => $data['description'] ?? null,
+                'price' => $data['price'],
+                'stock' => $data['stock'] ?? 0,
+                'is_available' => $data['is_available'] ?? true,
+            ]);
+
+            return $product;
+        } catch (\Exception $e) {
+            $this->logError('Failed to create product', $e, ['data' => $data]);
+            throw new \Exception('Unable to create product.');
+        }
+    }
+
+
     // Fetch a product by its name
-    public function findByName($name)
+    public function findByName(string $name): ?Product
     {
         return $this->model->where('name', $name)->first();
     }
-    
+
     // Fetch products with stock below a certain threshold
-    public function lowStock($limit = 10)
+    public function lowStock(int $limit = 10): Collection
     {
         return $this->model->where('stock', '<', $limit)->get();
     }
-
 }
