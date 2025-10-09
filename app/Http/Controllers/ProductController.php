@@ -2,68 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ProductService;
 use Illuminate\Http\Request;
-use App\Repositories\Contracts\ProductRepositoryInterface;
+
 class ProductController extends Controller
 {
-
-    protected $productRepository;
-
-    public function __construct(ProductRepositoryInterface $productRepository)
-    {
-        $this->productRepository = $productRepository;
-    }
     /**
-     * Display a listing of the resource.
+     * ProductController
+     * 
+     * Handles incoming HTTP requests related to products.
+     * Validates data, delegates business logic to the ProductService,
+     * and returns appropriate JSON or view responses.
      */
+    protected ProductService $productService;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
     public function index()
     {
-        return $this->productRepository->getAvailableProducts();
+        return $this->productService->getAvailableProducts();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
-    {
-        //
+    {  // validate input
+        $Validated = $request->validate([
+            'name'=>'required|string|max:255',
+            'description'=>'nullable|string',
+            'price'=>'required|numeric|min:0',
+            'stock' => 'nullable|integer|min:0',
+            'is_available' => 'boolean',
+            
+        ]);
+
+        //Call the service (not repository directly)
+        $product = $this->productService->createProduct($Validated);
+
+        return response()->json($product, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //
