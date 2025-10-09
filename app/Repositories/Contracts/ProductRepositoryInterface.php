@@ -2,13 +2,16 @@
 
 namespace App\Repositories\Contracts;
 
-//Uses the interface RepositoryInterface
-//Controller interface — Laravel injects the correct repository automatically
+use App\Models\Product;
+use Illuminate\Database\Eloquent\Collection;
+
+//inherits all CRUD method definitions (all, find, create, update, delete) from the base RepositoryInterface.
 interface ProductRepositoryInterface extends RepositoryInterface
 {
-    public function getAvailableProducts();
+    public function getAvailableProducts(): Collection; //Fetch products with status = 'available'
+    //READ -> Collection of products
+    public function findByName(string $name): ?Product; //Find products by name
 
-    public function findByName($name);
-
-    public function lowStock($limit = 10);
+    public function createProduct(array $data); //Create new product record
+    //WRITE -> Single created product
 }
