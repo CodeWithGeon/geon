@@ -1,14 +1,15 @@
 <?php
-
+//Repository = talks to the database (Model)
 namespace App\Repositories\Eloquent;
+// Implements the actual logic. Generic implementation of RepositoryInterface.
+// Handles data access (CRUD, DB queries)
 
 use App\Repositories\Contracts\RepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 
-//Common reusable CRUD methods for any model
-// Base repository implementing common methods to all from my interfaces   
 class BaseRepository implements RepositoryInterface
 {
    protected $model;
@@ -43,5 +44,12 @@ class BaseRepository implements RepositoryInterface
    {
       $record = $this->find($id);
       return $record ? $record->delete() : false;
+   }
+   protected function logError(string $message, \Exception $e, array $context = []): void
+   {
+      Log::error($message, array_merge([
+         'error' => $e->getMessage(),
+         'trace' => $e->getTraceAsString(),
+      ], $context));
    }
 }
