@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 // data related logic for Product model
-//Extends BaseRepository and adds model-specific logic (e.g. getAvailableProducts()
+//Product for specific queries getAvailableProducts(), findByCategory()
 
 use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryInterface;
@@ -12,17 +12,19 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 {
     public function __construct(Product $model)
     {
-        parent::__construct($model); //instance of the model
+        parent::__construct($model);
     }
-    //fetch all products that are marked as available
     public function getAvailableProducts(): Collection
     {
         return $this->model->where('is_available', true)->get();
-
-        
     }
-
-    public function createProduct(array $data)
+    /**
+     * createProduct
+     *
+     * @param  mixed $data
+     * @return Product
+     */
+    public function createProduct(array $data): ?Product
     {
         try {
             $product = $this->model->create([
@@ -40,16 +42,59 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
     }
 
-
-    // Fetch a product by its name
+    /**
+     * findByCategory
+     *
+     * @param  mixed $categoryId
+     * @return Collection
+     */
+    public function findByCategory($categoryId): Collection
+    {
+        return $this->model->where('category_id', $categoryId)->get();
+    }
+    /**
+     * findByName
+     *
+     * @param  mixed $name
+     * @return Product
+     */
+    /**
+     * findByName
+     *
+     * @param  mixed $name
+     * @return Product
+     */
     public function findByName(string $name): ?Product
     {
         return $this->model->where('name', $name)->first();
     }
-
-    // Fetch products with stock below a certain threshold
+    /**
+     * lowStock
+     * fetch products with stock below a certain threshold
+     * @param  mixed $limit
+     * @return Collection
+     */
     public function lowStock(int $limit = 10): Collection
     {
         return $this->model->where('stock', '<', $limit)->get();
+    }
+    /**
+     * getProductById
+     *
+     * @param  mixed $id
+     * @return Product
+     */
+    public function getProductById(int $id): ?Product
+    {
+        return $this->find($id);
+    }
+    /**
+     * getActiveProducts
+     *
+     * @return Collection
+     */
+    public function getActiveProducts(): Collection
+    {
+        return $this->model->where('is_active', true)->get();
     }
 }
