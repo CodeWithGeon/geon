@@ -1,11 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;// Import the controller
 
-//Route definitions
-// Route::get('/', function () {
-//     return redirect('/users/12'); // redirect root to a profile for testing
-// });
-// Route::get('/', [UserController::class, 'index']);
-Route::get('/users/{id}', [UserController::class, 'show']);
+
+Route::view('/login', 'auth.login')->name('login');
+Route::view('/register', 'auth.register')->name('register');
+
+Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+Route::view('/products', 'admin.products')->name('products.index');
+
+
+Route::get('/', function () {
+    return redirect('/login');
+});
