@@ -2,20 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Factories;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
+// Talks directly to the database (Eloquent ORM)
 class Product extends Model
-{    
-
-    // Product model defines what database columns can be mass-assigned: ot
-    // Talks directly to the database (Eloquent ORM)
+{
+    use HasFactory, SoftDeletes;
+    /**
+     * The attributes that are mass assignable.
+     * @var list<string>
+     */
     protected $fillable = [
         'name',
         'description',
         'price',
         'stock',
-        'status',
         'is_available',
+        'created_by',
     ];
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }
+
