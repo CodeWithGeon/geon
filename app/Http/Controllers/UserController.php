@@ -8,16 +8,14 @@ use App\Models\User; // Assuming you have a User model
 class UserController extends Controller
 {
     /**
-     * Show the profile for the given user.
+     * show
+     *
+     * @param  mixed $id
+     * @return void
      */
-    
-    public function index()
-    {
-        //
-    }
     public function show($id)
     {
-        $user = User::findOrFail($id); // Find user or throw 404
-        return view('users.Profile',['user'=> $user]);// Pass user data to the view
+        $user = User::findOrFail($id);
+        return view('users.Profile', ['user' => $user]);
     }
 }
