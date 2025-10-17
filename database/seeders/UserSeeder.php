@@ -2,37 +2,26 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
     {
-        //  $user = User::create([
-        //     'name' => 'Test User',
-        //     'email' => '    
-            
-
-          // Create or update an admin user
+        
         User::updateOrCreate(
-            ['email' => 'inigogeofrey@gmail.com'], // check if this email exists
+            ['email' => 'geofreyinigo@gmail.com'],
             [
                 'name' => 'Geofrey Inigo',
-                'password' => Hash::make('inigogeofrey'), // change to secure password
+                'password' => Hash::make('geofreyinigo'),
+                'is_admin' => true,
+                'role' => 'admin',
             ]
         );
-
-     //old code
-        // User::factory()->create([
-        //     'name' => 'Geofrey Inigo ',
-        //     'email' => 'inigogeofrey@gmail.com',
-        //     'password'=> bcrypt('bitaw'),
-        // ]);
     }
 }
