@@ -3,38 +3,103 @@
 namespace App\Services;
 
 use App\Repositories\Contracts\ProductRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
+
 // ProductService depends on ProductRepositoryInterface via dependency injection.
-// ProductRepositoryInterface → ProductRepository (Eloquent)
+// Business logic validation, rules, transaction logic.
 class ProductService
 {
-
     /**
-     * ProductService
-     * 
      * Contains business logic for products.
-     * Depends on ProductRepositoryInterface for data operations.
-     * Keeps controllers thin and clean by isolating core logic here.
      */
     protected ProductRepositoryInterface $productRepository;
-
-    public function __construct(ProductRepositoryInterface $productRepository)
+    /**
+     * __construct
+     *
+     * @param  mixed $productRepository
+     * @return void
+     */
+    public function __construct(ProductRepositoryInterface $productRepository) //ProductRepositoryInterface implementation injected via constructor
     {
         $this->productRepository = $productRepository;
     }
-    public function createProduct(array $data)
+    /**
+     * createProduct
+     *
+     * @param  mixed $data
+     * @return void
+     */
+    public function createProduct(array $data): mixed
     {
-
+        if (($data['stock'] ?? 0) <= 0) {
+            $data['is_available'] = false;
+        }
         $attributes = collect($data)
             ->only(['name', 'description', 'price', 'stock', 'is_available'])
             ->toArray();
 
-        // Then call the repo’s custom method
-        return $this->productRepository->createProduct($attributes);
+        $product = $this->productRepository->createProduct($attributes);
+        return $product;
     }
 
-
-    public function getAvailableProducts()
-    {   // Business logic before returning products
+    /**
+     * getAvailableProducts
+     *
+     * @return void
+     */
+    public function getAvailableProducts(): Collection
+    {
         return $this->productRepository->getAvailableProducts();
+    }
+
+    /**
+     * deleteProduct
+     *
+     * @param  mixed $id
+     * @return bool
+     */
+    public function deleteProduct(int $id): bool
+    {
+        return $this->productRepository->delete($id);
+    }
+
+    /**
+     * updateProduct
+     *
+     * @param  mixed $id
+     * @param  mixed $data
+     * @return bool
+     */
+    public function updateProduct(int $id, array $data): bool
+    {
+        if (isset($data['stock']) && $data['stock'] <= 0) {
+            $data['is_available'] = false;
+        }
+        $attributes = collect($data)
+            ->only(['name', 'description', 'price', 'stock', 'is_available'])
+            ->toArray();
+        return $this->productRepository->update($id, $attributes);
+    }
+
+    /**
+     * restoreProduct
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function restoreProduct(int $id)
+    {
+        return $this->productRepository->restore($id);
+    }
+
+    /**
+     * getProductDetails
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function getProductDetails(int $id)
+    {
+        return $this->productRepository->find($id);
     }
 }
