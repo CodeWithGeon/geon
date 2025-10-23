@@ -1,7 +1,7 @@
-<?php 
+<?php
 namespace App\Repositories\Eloquent;
 //data-related logic for inventory management.
-// Handles DB logic 
+// Handles DB logic
 use App\Models\Product;
 use App\Repositories\Contracts\InventoryRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
@@ -15,7 +15,7 @@ class InventoryRepository extends BaseRepository implements InventoryRepositoryI
         $this->model = $model;
     }
 
-    public function lowStock(int $limit = 10): Collection 
+    public function lowStock(int $limit = 10): Collection
     {
         return $this->model->where('stock', '<', $limit)->get();
     }
@@ -29,7 +29,7 @@ class InventoryRepository extends BaseRepository implements InventoryRepositoryI
         return $product->save();
     }
 
-    public function increaseStock(int $productId, int $amount)
+    public function increaseStock(int $productId, int $amount): bool
     {
         return $this->adjustStock($productId, +$amount);
     }

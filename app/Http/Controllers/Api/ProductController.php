@@ -1,34 +1,28 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 
-class ProductController extends Controller
+class ProductController extends BaseApiController
 {
-    /**
-     * Validates data, delegates business logic to the ProductService,
-     * and returns appropriate JSON or view responses.
-     */
-    protected ProductService $productService; // Dependency injection of ProductService
+    protected ProductService $productService;
+
     public function __construct(ProductService $productService)
     {
         $this->productService = $productService;
         $this->middleware('admin')->except(['index', 'show', 'edit']);
     }
 
-    /**
-     * index
-     *
-     * @return JsonResponse
-     */
     public function index(): JsonResponse
     {
-        return response()->json($this->productService->getAvailableProducts());
+        $products = $this->productService->getAvailableProducts();
+        return $this->successResponse($products, 'Products retrieved successfully');
     }
+
 
     /**
      * store
@@ -42,16 +36,17 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'is_available' => 'boolean',
+            'is_available' => 'nullable|boolean',
             'stock' => 'nullable|integer|min:0',
             'created_by' => 'nullable|exists:users,id',
         ]);
-        $Validated['created_by'] = Auth::id();
 
+        $validated['created_by'] = Auth::id();
         $product = $this->productService->createProduct($validated);
 
-        return response()->json($product, 201);
+        return $this->successResponse($product, 'Product created successfully', 201);
     }
+
 
     /**
      * update
@@ -62,12 +57,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id): JsonResponse
     {
-        $updated = $this->productService->updateProduct((int)$id, $request->all());
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|nullable|string',
+            'price' => 'sometimes|required|numeric|min:0',
+            'is_available' => 'sometimes|boolean',
+            'stock' => 'sometimes|nullable|integer|min:0',
+            'category_id' => 'sometimes|exists:categories,id',
+        ]);
+
+        $updated = $this->productService->updateProduct((int)$id, $validated);
 
         if (!$updated) {
-            return response()->json(['message' => 'Product not found'], 404);
+            return $this->errorResponse('Product not found', 404);
         }
-        return response()->json(['message' => 'Product updated successfully']);
+
+        $product = $this->productService->getProductDetails((int)$id);
+        return $this->successResponse($product, 'Product updated successfully');
     }
 
 
@@ -82,10 +88,12 @@ class ProductController extends Controller
         $deleted = $this->productService->deleteProduct((int)$id);
 
         if (!$deleted) {
-            return response()->json(['message' => 'Product not found'], 404);
+            return $this->errorResponse('Product not found', 404);
         }
-        return response()->json(['message' => 'Product deleted successfully']);
+
+        return $this->successResponse(null, 'Product deleted successfully');
     }
+
 
     /**
      * restore
@@ -98,10 +106,12 @@ class ProductController extends Controller
         $restored = $this->productService->restoreProduct((int)$id);
 
         if (!$restored) {
-            return response()->json(['message' => 'Product not found or not deleted'], 404);
+            return $this->errorResponse('Product not found or not deleted', 404);
         }
-        return response()->json(['message' => 'Product restored successfully']);
+
+        return $this->successResponse(null, 'Product restored successfully');
     }
+
 
     /**
      * show
@@ -114,23 +124,28 @@ class ProductController extends Controller
         $product = $this->productService->getProductDetails((int)$id);
 
         if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
+            return $this->errorResponse('Product not found', 404);
         }
-        return response()->json($product);
+
+        return $this->successResponse($product, 'Product retrieved successfully');
     }
+
+
     /**
      * edit
      *
      * @param  mixed $id
-     * @return void
+     * @return JsonResponse
      */
-    public function edit(string $id)
+    public function edit(string $id): JsonResponse
     {
         $product = $this->productService->getProductDetails((int)$id);
 
         if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
+            return $this->errorResponse('Product not found', 404);
         }
-        return response()->json($product);
+
+        return $this->successResponse($product, 'Product edit data retrieved');
     }
+
 }

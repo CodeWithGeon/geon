@@ -11,7 +11,7 @@ interface ProductRepositoryInterface extends RepositoryInterface
 {
     public function getAvailableProducts(): Collection;
     public function findByName(string $name): ?Product;
-    public function createProduct(array $data);
+    public function createProduct(array $data): Product;
     public function findByCategory($categoryId): Collection;
     public function lowStock(int $limit = 10): Collection;
     public function restore($id);

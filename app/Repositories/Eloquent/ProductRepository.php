@@ -24,7 +24,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
      * @param  mixed $data
      * @return Product
      */
-    public function createProduct(array $data): ?Product
+    public function createProduct(array $data): Product
     {
         try {
             $product = $this->model->create([

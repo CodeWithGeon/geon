@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
-
+use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 // ProductService depends on ProductRepositoryInterface via dependency injection.
-// Business logic validation, rules, transaction logic.
 class ProductService
 {
     /**
@@ -14,8 +14,6 @@ class ProductService
      */
     protected ProductRepositoryInterface $productRepository;
     /**
-     * __construct
-     *
      * @param  mixed $productRepository
      * @return void
      */
@@ -23,13 +21,15 @@ class ProductService
     {
         $this->productRepository = $productRepository;
     }
+
+
     /**
      * createProduct
      *
      * @param  mixed $data
-     * @return void
+     * @return Product
      */
-    public function createProduct(array $data): mixed
+    public function createProduct(array $data): Product
     {
         if (($data['stock'] ?? 0) <= 0) {
             $data['is_available'] = false;
@@ -38,8 +38,9 @@ class ProductService
             ->only(['name', 'description', 'price', 'stock', 'is_available'])
             ->toArray();
 
-        $product = $this->productRepository->createProduct($attributes);
-        return $product;
+        $attributes['created_by'] = Auth::id();
+
+        return $this->productRepository->createProduct($attributes);
     }
 
     /**
@@ -78,6 +79,7 @@ class ProductService
         $attributes = collect($data)
             ->only(['name', 'description', 'price', 'stock', 'is_available'])
             ->toArray();
+
         return $this->productRepository->update($id, $attributes);
     }
 
@@ -85,10 +87,11 @@ class ProductService
      * restoreProduct
      *
      * @param  mixed $id
-     * @return void
+     * 
      */
     public function restoreProduct(int $id)
     {
+
         return $this->productRepository->restore($id);
     }
 
@@ -96,7 +99,7 @@ class ProductService
      * getProductDetails
      *
      * @param  mixed $id
-     * @return void
+     * @return
      */
     public function getProductDetails(int $id)
     {

@@ -8,10 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
-// Handles data access (CRUD, DB queries)
-//Generic CRUD logic (shared by all repositories)
-// Reusable common DB logic
-// BaseRepository is an abstract class that holds all the common CRUD logic shared across all your repositories
+
 class BaseRepository implements RepositoryInterface
 {
     protected $model;

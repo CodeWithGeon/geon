@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Inventory extends Model
 {
     protected $fillable = [
@@ -11,11 +11,11 @@ class Inventory extends Model
         'product_id',
         'quantity',
         'location',
-        
+
     ];
 
-    public function product(){
-            return $this->belongsTo(Product::class);
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
-    
 }

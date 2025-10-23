@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -49,28 +49,14 @@ class User extends Authenticatable
         return $this->is_admin;
     }
 
-
     /**
-     * If you want to track products created by a user
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * products
+     *
+     * @return HasMany
      */
-    public function products()
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class, 'created_by');
     }
-    /**
-     * cast
-     *
-     * @return array
-     */
-    // protected function cast(): array
-    // {
-    //     return
-    //         [
-    //             'email_verified_at' => 'datetime',
-    //             'password' => 'hashed',
-    //             'deleted_at' => 'datetime',
-    //             'is_admin' => 'boolean',
-    //         ];
-    // }
+
 }
