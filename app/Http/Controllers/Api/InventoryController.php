@@ -12,7 +12,6 @@ class InventoryController extends BaseApiController
     protected InventoryService $inventoryService;
 
     /**
-     * __construct
      *
      * @param  mixed $inventoryService
      * @return void
