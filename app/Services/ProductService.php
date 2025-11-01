@@ -6,17 +6,11 @@ use App\Repositories\Contracts\ProductRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
-// ProductService depends on ProductRepositoryInterface via dependency injection.
+
 class ProductService
 {
-    /**
-     * Contains business logic for products.
-     */
     protected ProductRepositoryInterface $productRepository;
-    /**
-     * @param  mixed $productRepository
-     * @return void
-     */
+
     public function __construct(ProductRepositoryInterface $productRepository) //ProductRepositoryInterface implementation injected via constructor
     {
         $this->productRepository = $productRepository;
@@ -42,11 +36,10 @@ class ProductService
 
         return $this->productRepository->createProduct($attributes);
     }
-
     /**
      * getAvailableProducts
      *
-     * @return void
+     * @return Collection
      */
     public function getAvailableProducts(): Collection
     {
@@ -87,7 +80,7 @@ class ProductService
      * restoreProduct
      *
      * @param  mixed $id
-     * 
+     *
      */
     public function restoreProduct(int $id)
     {
