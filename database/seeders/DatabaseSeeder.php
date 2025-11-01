@@ -8,14 +8,11 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
-    // Call other seeders
     public function run(): void
     {
         $this->call([
             ProductSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }
