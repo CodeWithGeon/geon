@@ -19,10 +19,8 @@ class ProductController extends BaseApiController
 
     public function index(): JsonResponse
     {
-        $products = $this->productService->getAvailableProducts();
-        return $this->successResponse($products, 'Products retrieved successfully');
+        return $this->successResponse($this->productService->getAvailableProducts(), 'Products retrieved successfully');
     }
-
 
     /**
      * store
@@ -46,7 +44,6 @@ class ProductController extends BaseApiController
 
         return $this->successResponse($product, 'Product created successfully', 201);
     }
-
 
     /**
      * update
@@ -76,7 +73,6 @@ class ProductController extends BaseApiController
         return $this->successResponse($product, 'Product updated successfully');
     }
 
-
     /**
      * destroy
      *
@@ -93,7 +89,6 @@ class ProductController extends BaseApiController
 
         return $this->successResponse(null, 'Product deleted successfully');
     }
-
 
     /**
      * restore
@@ -112,7 +107,6 @@ class ProductController extends BaseApiController
         return $this->successResponse(null, 'Product restored successfully');
     }
 
-
     /**
      * show
      *
@@ -129,7 +123,6 @@ class ProductController extends BaseApiController
 
         return $this->successResponse($product, 'Product retrieved successfully');
     }
-
 
     /**
      * edit
