@@ -9,6 +9,7 @@ class BaseApiController extends Controller
 {
      /**
      * Return a success JSON response.
+     *
      */
     protected function successResponse($data = null, string $message = 'Success', int $status = 200): JsonResponse
     {
@@ -21,6 +22,7 @@ class BaseApiController extends Controller
 
     /**
      * Return an error JSON response.
+     *
      */
     protected function errorResponse(string $message = 'Error', int $status = 400, $errors = null): JsonResponse
     {
