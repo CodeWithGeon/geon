@@ -32,20 +32,19 @@ class OrderService
     public function createOrder(array $data): Order
     {
         return DB::transaction(function () use ($data) {
-            // Prepare the basic order fields
+            //order fields
             $orderAttributes = [
                 'status' => $data['status'] ?? 'pending',
                 'user_id' => Auth::id(),
                 'created_by' => Auth::id(),
-                'total_amount' => 0, // will update after calculating
+                'total_amount' => 0,
             ];
 
-            // Create the order first
+            // Create order first
             $order = $this->orderRepository->create($orderAttributes);
 
             $totalAmount = 0;
 
-            // Add order items and calculate total
             if (!empty($data['items']) && is_array($data['items'])) {
                 foreach ($data['items'] as $item) {
                     $subtotal = $item['quantity'] * $item['unit_price'];
