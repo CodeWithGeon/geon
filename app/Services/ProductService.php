@@ -11,7 +11,7 @@ class ProductService
 {
     protected ProductRepositoryInterface $productRepository;
 
-    public function __construct(ProductRepositoryInterface $productRepository) //ProductRepositoryInterface implementation injected via constructor
+    public function __construct(ProductRepositoryInterface $productRepository) 
     {
         $this->productRepository = $productRepository;
     }
