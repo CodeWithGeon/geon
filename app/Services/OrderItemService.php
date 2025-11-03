@@ -61,4 +61,9 @@ class OrderItemService
     {
         return $this->orderItemRepository->getItemsByProduct($productId);
     }
+
+    public function getItemsByUser(int $userId): Collection
+    {
+      return $this->orderItemRepository->getItemsByUser($userId);
+    }
 }
