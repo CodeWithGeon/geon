@@ -15,4 +15,6 @@ interface OrderItemRepositoryInterface extends RepositoryInterface
     public function getItemsByProduct(int $productId): Collection;
 
     public function createItem(array $data): OrderItem;
+
+    public function getItemsByUser(int $userId): Collection;
 }
