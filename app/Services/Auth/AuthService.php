@@ -4,36 +4,15 @@ namespace App\Services\Auth;
 
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 
 class AuthService
 {
-    protected UserRepositoryInterface $userRepository;
-    /**
-     * __construct
-     *
-     * @param  mixed $userRepository
-     * @return void
-     */
-    public function __construct(UserRepositoryInterface $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-    /**
-     * register
-     *
-     * @param  mixed $data
-     * @return User
-     */
     public function register(array $data): User
     {
         $data['password'] = Hash::make($data['password']);
-        $data['api_token'] = Str::random(60);
-        $data['is_admin'] = $data['is_admin'] ?? false;
-
-        return $this->userRepository->create($data);
+        return User::query()->create($data);
     }
 
 
