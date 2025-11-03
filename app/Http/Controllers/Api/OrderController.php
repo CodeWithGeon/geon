@@ -8,7 +8,6 @@ use Illuminate\Http\JsonResponse;
 
 class OrderController extends BaseApiController
 {
-    //Inherits from BaseApiController
     protected OrderService $orderService;
 
     public function __construct(OrderService $orderService)
