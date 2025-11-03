@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -38,6 +39,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'deleted_at' => 'datetime',
         'is_admin' => 'boolean',
     ];
     /**
@@ -58,5 +60,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Product::class, 'created_by');
     }
-
 }
