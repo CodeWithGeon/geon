@@ -1,11 +1,9 @@
 <?php
 namespace App\Repositories\Eloquent;
-//data-related logic for inventory management.
-// Handles DB logic
+
 use App\Models\Product;
 use App\Repositories\Contracts\InventoryRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
-// Implements inventory logic but still uses the Product model:
 class InventoryRepository extends BaseRepository implements InventoryRepositoryInterface
 {
     protected $model;
