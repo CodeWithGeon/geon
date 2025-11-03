@@ -58,4 +58,17 @@ class OrderItemController extends BaseApiController
 
         return $this->successResponse($item, 'Order item retrieved successfully');
     }
+
+    /**
+     * getItemsByUser
+     *
+     * @param  mixed $userId
+     * @return JsonResponse
+     */
+    public function getItemsByUser(int $userId): JsonResponse
+    {
+        $item = $this->orderItemService->getItemsByUser($userId);
+
+        return $this->successResponse($item, 'Order item retrieved by user successfully');
+    }
 }
