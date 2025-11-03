@@ -10,15 +10,16 @@ use App\Repositories\Eloquent\ProductRepository;
 use App\Repositories\Eloquent\InventoryRepository;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Eloquent\UserRepository;
-
+use App\Repositories\Contracts\OrderRepositoryInterface;
+use App\Repositories\Eloquent\OrderRepository;
+use App\Repositories\Contracts\OrderItemRepositoryInterface;
+use App\Repositories\Eloquent\OrderItemRepository;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Repositories\Eloquent\CategoryRepository;
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
-    {    //services from controller to repository
-        // Bind the interface to the concrete class
+    {
         $this->app->bind(
             ProductRepositoryInterface::class,
             ProductRepository::class
@@ -30,6 +31,18 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             UserRepositoryInterface::class,
             UserRepository::class
+        );
+        $this->app->bind(
+            OrderRepositoryInterface::class,
+            OrderRepository::class
+        );
+        $this->app->bind(
+            OrderItemRepositoryInterface::class,
+            OrderItemRepository::class
+        );
+        $this->app->bind(
+                      CategoryRepositoryInterface::class,
+                      CategoryRepository::class
         );
     }
 
