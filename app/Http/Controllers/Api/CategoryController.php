@@ -23,7 +23,9 @@ class CategoryController extends BaseApiController
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string'
+            'description' => 'nullable|string',
+            'created_by' => 'nullable|exists:user,id',
+
         ]);
         $category = $this->categoryService->createCategory($validated);
 
