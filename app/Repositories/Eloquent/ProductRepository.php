@@ -33,6 +33,9 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 'price' => $data['price'],
                 'stock' => $data['stock'] ?? 0,
                 'is_available' => $data['is_available'] ?? true,
+                'is_active' => $data['is_active'] ?? true,
+                'category_id' => $data['category_id'] ?? null,
+                'created_by' => $data['created_by'] ?? null,
             ]);
 
             return $product;
@@ -77,24 +80,5 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function lowStock(int $limit = 10): Collection
     {
         return $this->model->where('stock', '<', $limit)->get();
-    }
-    /**
-     * getProductById
-     *
-     * @param  mixed $id
-     * @return Product
-     */
-    public function getProductById(int $id): ?Product
-    {
-        return $this->find($id);
-    }
-    /**
-     * getActiveProducts
-     *
-     * @return Collection
-     */
-    public function getActiveProducts(): Collection
-    {
-        return $this->model->where('is_active', true)->get();
     }
 }
