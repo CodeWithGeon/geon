@@ -16,11 +16,12 @@ class ProductSeeder extends Seeder
                 'price' => 29.99,
                 'stock' => 50,
                 'is_available' => true,
-                'created_by' => null,
+                'is_active' => true,
+                'category_id' => 1,
+                'created_by' => null,      
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
         ]);
     }
 }
