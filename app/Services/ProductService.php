@@ -11,89 +11,73 @@ class ProductService
 {
     protected ProductRepositoryInterface $productRepository;
 
-    public function __construct(ProductRepositoryInterface $productRepository) 
+    public function __construct(ProductRepositoryInterface $productRepository)
     {
         $this->productRepository = $productRepository;
     }
 
+    public function getAvailableProducts(): Collection
+    {
+        return $this->productRepository->getAvailableProducts();
+    }
 
-    /**
-     * createProduct
-     *
-     * @param  mixed $data
-     * @return Product
-     */
+
     public function createProduct(array $data): Product
     {
         if (($data['stock'] ?? 0) <= 0) {
             $data['is_available'] = false;
         }
         $attributes = collect($data)
-            ->only(['name', 'description', 'price', 'stock', 'is_available'])
+            ->only(['name', 'description', 'price', 'stock', 'is_available', 'is_active', 'category_id', 'created_by'])
             ->toArray();
 
         $attributes['created_by'] = Auth::id();
 
         return $this->productRepository->createProduct($attributes);
     }
-    /**
-     * getAvailableProducts
-     *
-     * @return Collection
-     */
-    public function getAvailableProducts(): Collection
+
+
+    public function findByCategory(int $categoryId): Collection
     {
-        return $this->productRepository->getAvailableProducts();
+        return $this->productRepository->findByCategory($categoryId);
     }
 
-    /**
-     * deleteProduct
-     *
-     * @param  mixed $id
-     * @return bool
-     */
-    public function deleteProduct(int $id): bool
+
+    public function findByName(string $name): ?Product
     {
-        return $this->productRepository->delete($id);
+        return $this->productRepository->findByName($name);
     }
 
-    /**
-     * updateProduct
-     *
-     * @param  mixed $id
-     * @param  mixed $data
-     * @return bool
-     */
+
+    public function lowStock(int $limit = 10): Collection
+    {
+        return $this->productRepository->lowStock($limit);
+    }
+
     public function updateProduct(int $id, array $data): bool
     {
         if (isset($data['stock']) && $data['stock'] <= 0) {
             $data['is_available'] = false;
         }
         $attributes = collect($data)
-            ->only(['name', 'description', 'price', 'stock', 'is_available'])
+            ->only(['name', 'description', 'price', 'stock', 'is_available', 'is_active', 'category_id'])
+
             ->toArray();
 
         return $this->productRepository->update($id, $attributes);
     }
 
-    /**
-     * restoreProduct
-     *
-     * @param  mixed $id
-     *
-     */
+    public function deleteProduct(int $id): bool
+    {
+        return $this->productRepository->delete($id);
+    }
     public function restoreProduct(int $id)
     {
 
         return $this->productRepository->restore($id);
     }
 
-    /**
-     * getProductDetails
-     *
-     * @param  mixed $id
-     * @return
-     */
+
     public function getProductDetails(int $id)
     {
         return $this->productRepository->find($id);
