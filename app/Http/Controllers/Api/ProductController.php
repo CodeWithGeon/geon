@@ -14,9 +14,14 @@ class ProductController extends BaseApiController
     public function __construct(ProductService $productService)
     {
         $this->productService = $productService;
-        $this->middleware('admin')->except(['index', 'show', 'edit']);
+        $this->middleware('admin')->except(['index', 'show']);
     }
 
+    /**
+     * index
+     *
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         return $this->successResponse($this->productService->getAvailableProducts(), 'Products retrieved successfully');
@@ -34,8 +39,10 @@ class ProductController extends BaseApiController
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'is_available' => 'nullable|boolean',
             'stock' => 'nullable|integer|min:0',
+            'is_available' => 'nullable|boolean',
+            'is_active' => 'nullable|boolean',
+            'category_id' => 'nullable|exists:categories,id',
             'created_by' => 'nullable|exists:users,id',
         ]);
 
@@ -43,6 +50,46 @@ class ProductController extends BaseApiController
         $product = $this->productService->createProduct($validated);
 
         return $this->successResponse($product, 'Product created successfully', 201);
+    }
+
+    /**
+     * findByCategory
+     *
+     * @param  mixed $categoryId
+     * @return JsonResponse
+     */
+    public function findByCategory($categoryId): JsonResponse
+    {
+        $products = $this->productService->findByCategory((int) $categoryId);
+
+        return $this->successResponse($products, 'Product by category retrieved successfully');
+    }
+    /**
+     * findByName
+     *
+     * @param  mixed $request
+     * @return JsonResponse
+     */
+    public function findByName(Request $request): JsonResponse
+    {
+        $validated = $request->validate(['name' => 'required|string']);
+        $product = $this->productService->findByName($validated['name']);
+
+        if (!$product) {
+            return $this->errorResponse('Product not found', 404);
+        }
+        return $this->successResponse($product, 'Product found successfully');
+    }
+
+    /**
+     * lowStock
+     *
+     * @return JsonResponse
+     */
+    public function lowStock(): JsonResponse
+    {
+        $product = $this->productService->lowStock(10);
+        return $this->successResponse($product, 'Low stock products retrieved');
     }
 
     /**
@@ -140,5 +187,4 @@ class ProductController extends BaseApiController
 
         return $this->successResponse($product, 'Product edit data retrieved');
     }
-
 }
