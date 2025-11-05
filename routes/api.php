@@ -13,17 +13,20 @@ Route::prefix('auth')->group(function () {
     Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
 });
 
-// Public product routes
+//public
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{id}', [ProductController::class, 'show']);
 
-//products
+//Admin
 Route::middleware(['auth:sanctum', 'admin'])->prefix('products')->group(function () {
     Route::post('/', [ProductController::class, 'store']);
     Route::put('{id}', [ProductController::class, 'update']);
     Route::delete('{id}', [ProductController::class, 'destroy']);
     Route::post('{id}/restore', [ProductController::class, 'restore']);
     Route::get('{id}/edit', [ProductController::class, 'edit']);
+    Route::get('category/{categoryId}', [ProductController::class, 'findByCategory']);
+    Route::get('search/name', [ProductController::class, 'findByName']);
+    Route::get('low-stock', [ProductController::class, 'lowStock']);
 });
 
 
